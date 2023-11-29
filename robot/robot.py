@@ -1,5 +1,3 @@
-import navx
-import rev
 import wpilib
 import wpilib.drive
 import ctre
@@ -90,18 +88,24 @@ class SpartaBot(MagicRobot):
     def teleopPeriodic(self):
         '''NOTE: all components' execute() methods will be called automatically'''
 
+        #NOTE: currently no rotation capabilities
+
         self.drivetrain.set_velocity_vector([
             self.drive_controller.getLeftX(),
             self.drive_controller.getLeftY(),
         ])
 
-        #NOTE: currently no rotation capabilities
 
-        # log encoder values
+        # log swerve module values
         self.sd.putValue("FL encoder", self.frontLeftModule.encoder.getSelectedSensorPosition())
         self.sd.putValue("FR encoder", self.frontRightModule.encoder.getSelectedSensorPosition())
         self.sd.putValue("RL encoder", self.rearLeftModule.encoder.getSelectedSensorPosition())
         self.sd.putValue("RR encoder", self.rearRightModule.encoder.getSelectedSensorPosition())
+
+        self.sd.putValue("FL speed", self.frontLeftModule.requested_speed)
+        self.sd.putValue("FR speed", self.frontRightModule.requested_speed)
+        self.sd.putValue("RL speed", self.rearLeftModule.requested_speed)
+        self.sd.putValue("RR speed", self.rearRightModule.requested_speed)
 
 
 if __name__ == '__main__':
