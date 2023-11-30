@@ -28,11 +28,8 @@ class SwerveDrive:
         self.rearLeftModule.flush()
         self.rearRightModule.flush()
 
-    def set_velocity_vector(self, new: list[float, float]):
-        self.velocity_vector = normalize_vector([new[0], new[1]])
-
-    # def set_rotation_speed(self, new: float):
-    #     self.rotation_speed = limit(new)
+    def vector_magnitude(self, new: list[float, float]):
+        self.velocity_magnitude = new
 
     def physics_process(self):
         """NOTE: currently cannot do rotations (only does strafe)"""
@@ -53,7 +50,7 @@ class SwerveDrive:
 
     def execute(self):
         
-        self.sd.putValue("Velocity Vector", f"{self.velocity_vector[0]} {self.velocity_vector[1]}")
+        self.sd.putValue("Velocity Magnitude", f"{self.velocity_magnitude[0]} {self.velocity_magnitude[1]}")
 
         self.physics_process()
 

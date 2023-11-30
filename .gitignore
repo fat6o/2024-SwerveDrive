@@ -1,2 +1,5 @@
 __pycache__
 *.json
+__pycache__
+.deploy_cfg
+.gitignore

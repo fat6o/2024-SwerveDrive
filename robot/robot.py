@@ -3,13 +3,12 @@ import wpilib.drive
 import ctre
 from magicbot import MagicRobot
 from networktables import NetworkTables, NetworkTable
-
-
 from components.swerve_module import SwerveModule
 from components.swerve_drive import SwerveDrive
 
 
 # Download and install stuff on the RoboRIO after imaging
+# + For packages
 '''
 py -3 -m robotpy_installer download-python
 py -3 -m robotpy_installer install-python
@@ -31,9 +30,7 @@ python robot/robot.py deploy --skip-tests
 py robot/robot.py deploy --skip-tests --no-version-check
 '''
 
-
-
-
+# NOTE: Currently Incomplete, requires rotation capabilites... on the #TODO
 class SpartaBot(MagicRobot):
 
     drivetrain: SwerveDrive
@@ -47,15 +44,15 @@ class SpartaBot(MagicRobot):
         self.drive_controller: wpilib.XboxController = wpilib.XboxController(0)
 
         # drivetrain motors
-        self.frontLeftModule_driveMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(6)
-        self.frontRightModule_driveMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(8)
-        self.rearLeftModule_driveMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(3)
-        self.rearRightModule_driveMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(1)
+        self.frontLeftModule_driveMotor = ctre.WPI_TalonSRX(1)
+        self.frontRightModule_driveMotor = ctre.WPI_TalonSRX(3)
+        self.rearLeftModule_driveMotor = ctre.WPI_TalonSRX(7)
+        self.rearRightModule_driveMotor = ctre.WPI_TalonSRX(6)
 
-        self.frontLeftModule_rotateMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(5)
-        self.frontRightModule_rotateMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(7)
-        self.rearLeftModule_rotateMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(4)
-        self.rearRightModule_rotateMotor: ctre.WPI_TalonSRX = ctre.WPI_TalonSRX(2)
+        self.frontLeftModule_rotateMotor = ctre.WPI_TalonSRX(2)
+        self.frontRightModule_rotateMotor = ctre.WPI_TalonSRX(4)
+        self.rearLeftModule_rotateMotor = ctre.WPI_TalonSRX(8)
+        self.rearRightModule_rotateMotor = ctre.WPI_TalonSRX(5)
 
         # encoders
         self.frontLeftModule_encoder = self.frontLeftModule_rotateMotor
@@ -82,31 +79,20 @@ class SpartaBot(MagicRobot):
 
     def teleopInit(self):
         self.drivetrain.flush()
-
         self.sd.putValue("Mode", "Teleop")
 
     def teleopPeriodic(self):
-        '''NOTE: all components' execute() methods will be called automatically'''
-
-        #NOTE: currently no rotation capabilities
-
         self.drivetrain.set_velocity_vector([
             self.drive_controller.getLeftX(),
             self.drive_controller.getLeftY(),
         ])
 
-
         # log swerve module values
-        self.sd.putValue("FL encoder", self.frontLeftModule.encoder.getSelectedSensorPosition())
-        self.sd.putValue("FR encoder", self.frontRightModule.encoder.getSelectedSensorPosition())
-        self.sd.putValue("RL encoder", self.rearLeftModule.encoder.getSelectedSensorPosition())
-        self.sd.putValue("RR encoder", self.rearRightModule.encoder.getSelectedSensorPosition())
-
-        self.sd.putValue("FL speed", self.frontLeftModule.requested_speed)
-        self.sd.putValue("FR speed", self.frontRightModule.requested_speed)
-        self.sd.putValue("RL speed", self.rearLeftModule.requested_speed)
-        self.sd.putValue("RR speed", self.rearRightModule.requested_speed)
-
+        print("FL encoder", self.frontLeftModule_encoder.getSelectedSensorPosition())
+        print("FR encoder", self.frontRightModule_encoder.getSelectedSensorPosition())
+        print("RL encoder", self.rearLeftModule_encoder.getSelectedSensorPosition())
+        print("RR encoder", self.rearRightModule_encoder.getSelectedSensorPosition())
+        # For testing purposes // remove later
 
 if __name__ == '__main__':
     wpilib.run(SpartaBot)
