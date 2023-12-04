@@ -1,61 +1,61 @@
-from networktables import NetworkTable
-from components.swerve_module import SwerveModule
+# from networktables import NetworkTable
+# from components.swerve_module import SwerveModule
 
-from tools.utils import *
+# from tools.utils import *
 
-class SwerveDrive:
-    """NOTE: ensure wheels are aligned forward when first turned on"""
+# class SwerveDrive:
+#     """NOTE: ensure wheels are aligned forward when first turned on"""
 
-    sd: NetworkTable
+#     sd: NetworkTable
 
-    frontLeftModule: SwerveModule
-    frontRightModule: SwerveModule
-    rearLeftModule: SwerveModule
-    rearRightModule: SwerveModule
+#     frontLeftModule: SwerveModule
+#     frontRightModule: SwerveModule
+#     rearLeftModule: SwerveModule
+#     rearRightModule: SwerveModule
 
-    def setup(self):
-        self.velocity_vector = [
-            0, # fwd (positive) / bwd
-            0  # right(positive) / left
-        ]
+#     def setup(self):
+#         self.velocity_vector = [
+#             0, # fwd (positive) / bwd
+#             0  # right(positive) / left
+#         ]
 
-        self.rotation_speed = 0 # clockwise (positive) / ccw
+#         self.rotation_speed = 0 # clockwise (positive) / ccw
 
-    def flush(self):
-        """reset all modules to make them face forward"""
-        self.frontLeftModule.flush()
-        self.frontRightModule.flush()
-        self.rearLeftModule.flush()
-        self.rearRightModule.flush()
+#     def flush(self):
+#         """reset all modules to make them face forward"""
+#         self.frontLeftModule.flush()
+#         self.frontRightModule.flush()
+#         self.rearLeftModule.flush()
+#         self.rearRightModule.flush()
 
-    def vector_magnitude(self, new: list[float, float]):
-        self.velocity_magnitude = new
+#     def set_vector_magnitude(self, new: list[float, float]):
+#         self.velocity_magnitude = new
 
-    def physics_process(self):
-        """NOTE: currently cannot do rotations (only does strafe)"""
+#     def physics_process(self):
+#         """NOTE: currently cannot do rotations (only does strafe)"""
         
-        # break down velocity vector into speed and angle
-        angle = vector_to_degrees(self.velocity_vector)
-        speed = get_vector_length(self.velocity_vector)
+#         # break down velocity vector into speed and angle
+#         angle = vector_to_degrees(self.velocity_magnitude)
+#         speed = get_vector_length(self.velocity_magnitude)
 
-        self.frontLeftModule.set_direction(angle)
-        self.frontRightModule.set_direction(angle)
-        self.rearLeftModule.set_direction(angle)
-        self.rearRightModule.set_direction(angle)
+#         self.frontLeftModule.set_direction(angle)
+#         self.frontRightModule.set_direction(angle)
+#         self.rearLeftModule.set_direction(angle)
+#         self.rearRightModule.set_direction(angle)
 
-        self.frontLeftModule.set_speed(speed)
-        self.frontRightModule.set_speed(speed)
-        self.rearLeftModule.set_speed(speed)
-        self.rearRightModule.set_speed(speed)
+#         self.frontLeftModule.set_speed(speed)
+#         self.frontRightModule.set_speed(speed)
+#         self.rearLeftModule.set_speed(speed)
+#         self.rearRightModule.set_speed(speed)
 
-    def execute(self):
+#     def execute(self):
         
-        self.sd.putValue("Velocity Magnitude", f"{self.velocity_magnitude[0]} {self.velocity_magnitude[1]}")
+#         self.sd.putValue("Velocity Magnitude", f"{self.velocity_magnitude[0]} {self.velocity_magnitude[1]}")
 
-        self.physics_process()
+#         self.physics_process()
 
-        # manually call module's execute method
-        self.frontLeftModule.execute()
-        self.frontRightModule.execute()
-        self.rearLeftModule.execute()
-        self.rearRightModule.execute()
+#         # manually call module's execute method
+#         self.frontLeftModule.execute()
+#         self.frontRightModule.execute()
+#         self.rearLeftModule.execute()
+#         self.rearRightModule.execute()
