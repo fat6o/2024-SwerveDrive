@@ -1,61 +1,55 @@
-# from networktables import NetworkTable
-# from components.swerve_module import SwerveModule
+from wpilib import MotorControllerGroup
+import ctre
+import wpilib
+import wpilib.drive
+from wpilib.controller import PIDController
+from ctre import WPI_TalonSRX
+from magicbot import MagicRobot
+from networktables import NetworkTables, NetworkTable
 
-# from tools.utils import *
 
-# class SwerveDrive:
-#     """NOTE: ensure wheels are aligned forward when first turned on"""
+SENSITIVITY = 0.05
 
-#     sd: NetworkTable
+SPEED_MULTIPLIER = 1
+ANGLE_MULTIPLIER = 1
 
-#     frontLeftModule: SwerveModule
-#     frontRightModule: SwerveModule
-#     rearLeftModule: SwerveModule
-#     rearRightModule: SwerveModule
+class drive_train:
+    """NOTE: NOT a magic component, variable injection will not work here; manually instantiate"""    
+    
+    def setup(self):
+        self.reset_speed = 0
+        self.reset_angle = 0
+        self.requested_speed = 0
+        self.requested_angle = 0
+        self.requested_strafe = 0
 
-#     def setup(self):
-#         self.velocity_vector = [
-#             0, # fwd (positive) / bwd
-#             0  # right(positive) / left
-#         ]
+        self.pid_controller = PIDController(1.0, 0.0, 0.0)
+        self.pid_controller.enableContinuousInput(0.0, 5.0)
+        self.pid_controller.setTolerance(0.05, 0.05)
+    
+    def flush(self):
+        self.requested_speed = self.reset_speed
+        self.requested_angle = self.reset_angle
+    
+    def set_angle(self, angle):
+        self.requested_angle = angle
+    
+    def set_speed(self, speed):
+        self.requested_speed = speed
+    
+    def set_strafe(self, strafe):
+        self.requested_strafe = strafe
 
-#         self.rotation_speed = 0 # clockwise (positive) / ccw
+    def move(self, speed, strafe, angle):
+        self.set_angle(angle)
+        self.set_speed(speed)
+        self.set_strafe(strafe)
+    
+    
 
-#     def flush(self):
-#         """reset all modules to make them face forward"""
-#         self.frontLeftModule.flush()
-#         self.frontRightModule.flush()
-#         self.rearLeftModule.flush()
-#         self.rearRightModule.flush()
 
-#     def set_vector_magnitude(self, new: list[float, float]):
-#         self.velocity_magnitude = new
+    
+    def execute(self) -> None:
+        self._pid_controller.reset()
+        for i in self.drive_motors
 
-#     def physics_process(self):
-#         """NOTE: currently cannot do rotations (only does strafe)"""
-        
-#         # break down velocity vector into speed and angle
-#         angle = vector_to_degrees(self.velocity_magnitude)
-#         speed = get_vector_length(self.velocity_magnitude)
-
-#         self.frontLeftModule.set_direction(angle)
-#         self.frontRightModule.set_direction(angle)
-#         self.rearLeftModule.set_direction(angle)
-#         self.rearRightModule.set_direction(angle)
-
-#         self.frontLeftModule.set_speed(speed)
-#         self.frontRightModule.set_speed(speed)
-#         self.rearLeftModule.set_speed(speed)
-#         self.rearRightModule.set_speed(speed)
-
-#     def execute(self):
-        
-#         self.sd.putValue("Velocity Magnitude", f"{self.velocity_magnitude[0]} {self.velocity_magnitude[1]}")
-
-#         self.physics_process()
-
-#         # manually call module's execute method
-#         self.frontLeftModule.execute()
-#         self.frontRightModule.execute()
-#         self.rearLeftModule.execute()
-#         self.rearRightModule.execute()
