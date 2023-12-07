@@ -47,23 +47,6 @@ class SpartaBot(MagicRobot):
 
         self.drive_controller: wpilib.XboxController = wpilib.XboxController(0)
 
-        # drivetrain motors
-        # self.frontLeftModule_driveMotor = ctre.WPI_TalonSRX(1)
-        # self.frontRightModule_driveMotor = ctre.WPI_TalonSRX(3)
-        # self.rearLeftModule_driveMotor = ctre.WPI_TalonSRX(7)
-        # self.rearRightModule_driveMotor = ctre.WPI_TalonSRX(6)
-
-        # self.frontLeftModule_rotateMotor = ctre.WPI_TalonSRX(2)
-        # self.frontRightModule_rotateMotor = ctre.WPI_TalonSRX(4)
-        # self.rearLeftModule_rotateMotor = ctre.WPI_TalonSRX(8)
-        # self.rearRightModule_rotateMotor = ctre.WPI_TalonSRX(5)
-
-        # # encoders
-        # self.frontLeftModule_encoder = self.frontLeftModule_driveMotor
-        # self.frontRightModule_encoder = self.frontRightModule_driveMotor
-        # self.rearLeftModule_encoder = self.rearLeftModule_rotateMotor
-        # self.rearRightModule_encoder = self.rearRightModule_driveMotor
-
         self.frontLeftDrive = ctre.WPI_TalonSRX(1)
         self.frontRightDrive = ctre.WPI_TalonSRX(3)
         self.rearLeftDrive = ctre.WPI_TalonSRX(7)
@@ -78,17 +61,6 @@ class SpartaBot(MagicRobot):
         self.rearLeftModule_encoder = self.rearLeftDrive
         self.rearRightModule_encoder = self.rearRightDrive
 
-        # swerve modules defined here --
-        # since magicrobot only allows 1 layer of variable injection 
-        #   (ie, drivetrain cannot be injected with swerve_module if swerve_module needs motors to be injected first)
-        # self.frontLeftModule: SwerveModule = SwerveModule(self.frontLeftModule_driveMotor, self.frontLeftModule_rotateMotor, self.frontLeftModule_encoder)
-        # self.frontRightModule: SwerveModule = SwerveModule(self.frontRightModule_driveMotor, self.frontRightModule_rotateMotor, self.frontRightModule_encoder)
-        # self.rearLeftModule: SwerveModule = SwerveModule(self.rearLeftModule_driveMotor, self.rearLeftModule_rotateMotor, self.rearLeftModule_encoder)
-        # self.rearRightModule: SwerveModule = SwerveModule(self.rearRightModule_driveMotor, self.rearRightModule_rotateMotor, self.rearRightModule_encoder)
-
-
-        #print(f"{self.frontLeftModule.encoder_zero=} {self.frontRightModule.encoder_zero=} {self.rearLeftModule.encoder_zero=} {self.rearRightModule.encoder_zero=}")
-
     def disabledInit(self):
         pass
 
@@ -96,13 +68,7 @@ class SpartaBot(MagicRobot):
         self.sd.putValue("Mode", "Disabled")
 
     def teleopInit(self):
-        # # self.drivetrain.flush()
-        # self.frontRightModule.encoder_hardreset()
-        # self.frontLeftModule.encoder_hardreset()
-        # self.rearLeftModule.encoder_hardreset()
-        # self.rearRightModule.encoder_hardreset()
-
-        self.sd.putValue("Mode", "Teleop")
+        self.drive_motors.flush
 
     def teleopPeriodic(self):
         # self.drivetrain.set_vector_magnitude([
